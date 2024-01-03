@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
-const backendLink = 'https://rails-8q41.onrender.com/';
+import { backendLink } from '../../constants';
 
 const initialState = {
   housesList: [],

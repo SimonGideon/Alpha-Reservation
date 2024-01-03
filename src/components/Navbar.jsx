@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { HiOutlineMenuAlt4 } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
-import links from '../constants';
+import { links } from '../constants';
 
 const Navbar = () => {
   const [open, setOpen] = useState(true);

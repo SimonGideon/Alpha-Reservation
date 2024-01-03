@@ -7,4 +7,6 @@ const links = [
   { path: '/logout', text: 'Logout' },
 ];
 
-export default links;
+const backendLink = 'http://127.0.0.1:3000/';
+
+export { links, backendLink };
