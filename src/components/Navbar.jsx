@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { HiOutlineMenuAlt4 } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
@@ -14,19 +14,19 @@ const Navbar = () => {
     nav.style.display = 'flex';
   };
 
-  const closeMenu = () => {
+  const closeMenu = useCallback(() => {
     setOpen(!open);
     if (window.innerWidth < 1340) {
       const nav = document.querySelector('nav');
       nav.style.display = 'none';
       nav.style.position = 'absolute';
     }
-  };
+  }, [open]);
 
   useEffect(() => {
     closeMenu();
     setOpen(true);
-  }, [location]);
+  }, [location, closeMenu]);
 
   useEffect(() => {
     const mediaQuery1 = window.matchMedia('(min-width: 1340px)');

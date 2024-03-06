@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { backendLink } from '../../constants';
+
 const initialState = {
   house: null,
   isLoading: false,

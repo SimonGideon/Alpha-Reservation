@@ -21,10 +21,10 @@ const HouseReservations = (props) => {
 
   useEffect(() => {
     dispatch(fetchHouseReservations(houseId));
-  }, [dispatch]);
+  }, [dispatch, houseId]);
   useEffect(() => {
     dispatch(fetchHouse(houseId));
-  }, [dispatch]);
+  }, [dispatch, houseId]);
   return (
     <div className="w-full flex flex-col items-center py-[20px]">
       <h1 className="font-black text-4xl text-center my-[20px]">

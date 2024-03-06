@@ -18,13 +18,18 @@ const LoginForm = (props) => {
       navigate('/home');
     }
   }, [authorized, navigate]);
+
+  useEffect(() => {
+    setEmail('simon20163858@gmail.com');
+    setPassword('momo123456');
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     dispatch(login({ email, password }))
       .unwrap()
       .then((token) => {
-        // Handle successful login
         localStorage.setItem('token', token);
         navigate('/home');
       });
@@ -47,7 +52,7 @@ const LoginForm = (props) => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
+            placeholder="simon20163858@gmail.com"
             required
             className="mt-2 w-full p-2 border border-slate-300 rounded text-sm shadow-sm
               focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
@@ -56,7 +61,7 @@ const LoginForm = (props) => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
+            placeholder="momo123456"
             required
             className="mt-2 w-full p-2 border border-slate-300 rounded text-sm shadow-sm
               focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
@@ -71,4 +76,5 @@ const LoginForm = (props) => {
 LoginForm.propTypes = {
   authorized: PropTypes.bool.isRequired,
 };
+
 export default LoginForm;

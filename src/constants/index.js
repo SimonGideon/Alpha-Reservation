@@ -7,6 +7,6 @@ const links = [
   { path: '/logout', text: 'Logout' },
 ];
 
-const backendLink = 'http://127.0.0.1:3000/';
+const backendLink = 'https://book-an-appointment-backend-3kmv.onrender.com/';
 
 export { links, backendLink };
