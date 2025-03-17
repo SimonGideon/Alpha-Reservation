@@ -1,240 +1,58 @@
-# NRF Grant Application Platform
+# <b>Alpha Reservations</b>
 
-## Overview
-A Next.js-based application for managing NRF (National Research Foundation) grant applications, featuring a modern UI built with Tailwind CSS, Radix UI components, and advanced form handling.
+## <b>Table of Contents</b>
 
-## Table of Contents
+- [About the Project](#about-project)
+  - [Built With:](#built-with)
+    - [Tech Stack](#tech-stack)
+    - [Key Features](#key-features)
+  - [Live Demo](#live-demo)
 - [Getting Started](#getting-started)
+  - [Setup](#setup)
+  - [Kanbanboards](#kanbanboards)
   - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-- [Project Structure](#project-structure)
-- [Development Workflow](#development-workflow)
-- [Key Features](#key-features)
-- [API Documentation](#api-documentation)
-- [Database](#database)
-- [Deployment](#deployment)
-- [Common Issues](#common-issues)
+  - [Install](#install)
+  - [Usage](#usage)
+- [Authors](#authors)
+- [Future Features](#future-features)
 - [Contributing](#contributing)
-- [Resources](#resources)
+- [Show your support](#support)
+- [Acknowledgements](#acknowledgements)
+- [FAQ](#faq)
+- [License](#license)
 
-## Getting Started
+## <b>Alpha Reservations</b> <a name="about-project"></a>
 
-### Prerequisites
-```
-# Required software and tools
-- Node.js (v18.x or higher recommended)
-- npm (v9.x or higher)
-- Git
-```
+This is a full stack app built with React, Redux, Tailwind CSS, and Ruby on Rails.<br>
+The application features authentication to access it, promps the user with a selection of houses, and a navigation bar, allowing the user to reserve, create, and delete houses.
 
-### Installation
-```bash
-# Clone the repository
-git clone https://github.com/your-org/nrf-grant.git
-cd nrf-grant
+## <b>Built With</b> <a name="built-with"></a>
 
-# Install dependencies
-npm install
+### Tech Stack : <a name="tech-stack"></a>
+Client
+- <a href="https://react.dev/">React</a>
 
-# Start the development server
-npm run dev
-```
+Server
+- <a href="https://rubyonrails.org/">Ruby on Rails</a>
 
-### Configuration
-The application uses Next.js configuration for image domains and remote patterns:
+Database
+- <a href="https://www.postgresql.org/">PostgreSQL</a>
 
-```javascript
-// next.config.js
-import type { NextConfig } from "next";
+### Key Features : <a name="key-features"></a>
+- Authentication
+- Manage reservations per user
+- API calls to reserve, create and delete entities
+- Responsive design
 
-const nextConfig: NextConfig = {
-  reactStrictMode: true,
-  images: {
-    domains: ['41.90.122.129'],
-    remotePatterns: [
-      {
-        protocol: 'http',
-        hostname: '41.90.122.129',
-        port: '81',
-        pathname: '/media/**',
-      },
-    ],
-  },
-};
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-export default nextConfig;
-```
+### Kanbanboards
+1. [Initial Kanbanboard](https://github.com/jmonto55/book-an-appointment-backend/issues/1)
+2. [Final Kanbanboard](https://github.com/jmonto55/book-an-appointment-backend/projects/2)
+<!-- LIVE DEMO -->
 
-## Project Structure
-```
-/public            # Static assets
-/src               # Source code
-  /app             # Next.js app directory
-    /admin         # Admin section
-    /auth          # Authentication 
-    /collaborator  # Collaborator section
-    /financial     # Financial section
-    /hoc           # Higher-order components
-    /reviewer      # Reviewer section
-    /seeker        # Seeker section
-    /state         # State management
-    /store         # Store section
-    /styles        # Styles
-    /utils         # Utility functions
-    favicon.ico    # Favicon
-    globals.css    # Global CSS
-    layout.tsx     # Root layout
-    loading.tsx    # Loading component
-    page.tsx       # Root page
-    template.tsx   # Page template
-  /components      # Reusable components
-  /lib             # Library code
-    utils.ts       # Utility functions
-.gitignore         # Git ignore file
-components.json    # Shadcn UI components config
-deploy.sh          # Deployment script
-```
+## <b>Live Demo</b> <a name="live-demo"></a>
 
-## Development Workflow
+- [Live Demo](https://alpha-reservation.vercel.app/)
 
-### Available Scripts
-```bash
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm run start
-
-# Run linting
-npm run lint
-```
-
-### Branch Strategy
-- `main` - Production-ready code
-- `dev` - Integration branch for features
-- `test` - Piloting environment
-- `yourname` - For new features
-- `bugfix/bug-name` - For bug fixes
-
-### Commit Convention
-We follow the [Conventional Commits](https://medium.com/@simongideon918/upscaling-your-github-commit-messages-d360f94843e4) standard:
-```
-feat: add new feature
-fix: fix a bug
-docs: update documentation
-style: formatting changes
-refactor: code change that neither fixes a bug nor adds a feature
-chore: changes to the build process or auxiliary tools
-```
-
-
-## API Documentation
-
-### Authentication
-The application uses cookie-based authentication with js-cookie library.
-
-```typescript
-// Axios instance for api calls
-import axios from "axios";
-import Cookies from "js-cookie";
-
-const axiosInstance = axios.create({
-  baseURL: "http://41.90.122.129:81/api/v1",
-});
-
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const excludedEndpoints = [
-      "/signup/",
-      "/password-reset/",
-      "/set-new-password/",
-      "/resend-otp/",
-      "/verify-otp/",
-      "/login/",
-    ];
-
-    if (config.url && !excludedEndpoints.includes(config.url)) {
-      const token = Cookies.get("access_token");
-      if (token) {
-        config.headers["Authorization"] = `Bearer ${token}`;
-      }
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        const refreshToken = Cookies.get("refresh_token");
-        const response = await axios.post(
-          `${axiosInstance.defaults.baseURL}/auth-refresh/`,
-          {
-            refresh_token: refreshToken,
-          }
-        );
-
-        const newAccessToken = response.data.access;
-        const newRefreshToken = response.data.refresh;
-        Cookies.set("access_token", newAccessToken);
-        Cookies.set("refresh_token", newRefreshToken);
-        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-        return axios(originalRequest);
-      } catch (refreshError) {
-        window.location.href = "/auth/login";
-        return Promise.reject(refreshError);
-      }
-    }
-
-    return Promise.reject(error);
-  }
-);
-
-export default axiosInstance;
-
-```
-
-## Deployment
-
-### Build for Production
-```bash
-# Create optimized production build
-npm run build
-
-# Start the production server
-npm run start
-```
-
-### Next.js Deployment Options
-- Vercel (recommended for Next.js apps)
-- Netlify
-- AWS Amplify
-- Self-hosted Node.js server
-
-## Common Issues
-
-### Problem: Images not loading from the API server
-**Solution:** Check that the domain is correctly configured in next.config.js and that the image paths match the expected pattern.
-
-### Problem: Server Connectivity
-**Solution:** Verify in the inspect browser dev tools network tab if there are any connectivity issues inquire to confirm if the server is up.
-
-
-## Resources
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [Radix UI Documentation](https://www.radix-ui.com/docs/primitives)
-- [React Hook Form Documentation](https://react-hook-form.com/get-started)
-- [Redux Toolkit Documentation](https://redux-toolkit.js.org/introduction/getting-started)
-- [Shadcn](https://ui.shadcn.com/docs/react-19)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
