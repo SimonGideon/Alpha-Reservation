@@ -1,180 +1,243 @@
-# <b>Alpha Reservations</b>
+# NRF Grant Application Platform
 
-## <b>Table of Contents</b>
+## Overview
+A Next.js-based application for managing NRF (National Research Foundation) grant applications, featuring a modern UI built with Tailwind CSS, Radix UI components, and advanced form handling.
 
-- [About the Project](#about-project)
-  - [Built With:](#built-with)
-    - [Tech Stack](#tech-stack)
-    - [Key Features](#key-features)
-  - [Live Demo](#live-demo)
+## Table of Contents
 - [Getting Started](#getting-started)
-  - [Setup](#setup)
-  - [Kanbanboards](#kanbanboards)
   - [Prerequisites](#prerequisites)
-  - [Install](#install)
-  - [Usage](#usage)
-- [Authors](#authors)
-- [Future Features](#future-features)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+- [Project Structure](#project-structure)
+- [Development Workflow](#development-workflow)
+- [Key Features](#key-features)
+- [API Documentation](#api-documentation)
+- [Database](#database)
+- [Deployment](#deployment)
+- [Common Issues](#common-issues)
 - [Contributing](#contributing)
-- [Show your support](#support)
-- [Acknowledgements](#acknowledgements)
-- [FAQ](#faq)
-- [License](#license)
+- [Resources](#resources)
 
-## <b>Alpha Reservations</b> <a name="about-project"></a>
+## Getting Started
 
-This is a full stack app built with React, Redux, Tailwind CSS, and Ruby on Rails.<br>
-The application features authentication to access it, promps the user with a selection of houses, and a navigation bar, allowing the user to reserve, create, and delete houses.
+### Prerequisites
+```
+# Required software and tools
+- Node.js (v18.x or higher recommended)
+- npm (v9.x or higher)
+- Git
+```
 
-## <b>Built With</b> <a name="built-with"></a>
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/your-org/nrf-grant.git
+cd nrf-grant
 
-### Tech Stack : <a name="tech-stack"></a>
-Client
-- <a href="https://react.dev/">React</a>
+# Install dependencies
+npm install
 
-Server
-- <a href="https://rubyonrails.org/">Ruby on Rails</a>
+# Start the development server
+npm run dev
+```
 
-Database
-- <a href="https://www.postgresql.org/">PostgreSQL</a>
+### Configuration
+The application uses Next.js configuration for image domains and remote patterns:
 
-### Key Features : <a name="key-features"></a>
-- Authentication
-- Manage reservations per user
-- API calls to reserve, create and delete entities
-- Responsive design
+```javascript
+// next.config.js
+import type { NextConfig } from "next";
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
+  images: {
+    domains: ['41.90.122.129'],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: '41.90.122.129',
+        port: '81',
+        pathname: '/media/**',
+      },
+    ],
+  },
+};
 
-### Kanbanboards
-1. [Initial Kanbanboard](https://github.com/jmonto55/book-an-appointment-backend/issues/1)
-2. [Final Kanbanboard](https://github.com/jmonto55/book-an-appointment-backend/projects/2)
-<!-- LIVE DEMO -->
+export default nextConfig;
+```
 
-## <b>Live Demo</b> <a name="live-demo"></a>
+## Project Structure
+```
+/public            # Static assets
+/src               # Source code
+  /app             # Next.js app directory
+    /admin         # Admin section
+    /auth          # Authentication 
+    /collaborator  # Collaborator section
+    /financial     # Financial section
+    /hoc           # Higher-order components
+    /reviewer      # Reviewer section
+    /seeker        # Seeker section
+    /state         # State management
+    /store         # Store section
+    /styles        # Styles
+    /utils         # Utility functions
+    favicon.ico    # Favicon
+    globals.css    # Global CSS
+    layout.tsx     # Root layout
+    loading.tsx    # Loading component
+    page.tsx       # Root page
+    template.tsx   # Page template
+  /components      # Reusable components
+  /lib             # Library code
+    utils.ts       # Utility functions
+.gitignore         # Git ignore file
+components.json    # Shadcn UI components config
+deploy.sh          # Deployment script
+```
 
-- [Live Demo](https://alpha-reservation.vercel.app/)
+## Development Workflow
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+### Available Scripts
+```bash
+# Run development server
+npm run dev
 
-# <b>Getting Started</b><a name="getting-started"></a>
-To get a local copy up and running follow these simple example steps, you'll need both repositories, front and back end.
+# Build for production
+npm run build
 
-## <b>Setup</b>
-Clone these repositories to your desired folder:
+# Start production server
+npm run start
 
-`
-cd book-an-appointment
-`
+# Run linting
+npm run lint
+```
 
-`
-git clone https://github.com/jmonto55/book-an-appointment-frontend.git
-`
+### Branch Strategy
+- `main` - Production-ready code
+- `dev` - Integration branch for features
+- `test` - Piloting environment
+- `yourname` - For new features
+- `bugfix/bug-name` - For bug fixes
 
-`
-git clone https://github.com/jmonto55/book-an-appointment-backend.git
-`
-## <b>Install</b>
-
-Install this project with:
-
-`
-cd book-an-appointment-frontend
-`
-
-`
-npm i
-`
-
-`
-cd book-an-appointment-backend
-`
-
-`
-bundle i
-`
-
-### Database
-
-At the backend, create the databases, run migrations, and populate it with seed data:
-
-`
-rails db:create
-`
-
-`
-rails db:migrate
-`
-
-`
-rails db:seed
-`
-
-### Usage
-First, fire up the server at the backend:
+### Commit Convention
+We follow the [Conventional Commits](https://medium.com/@simongideon918/upscaling-your-github-commit-messages-d360f94843e4) standard:
+```
+feat: add new feature
+fix: fix a bug
+docs: update documentation
+style: formatting changes
+refactor: code change that neither fixes a bug nor adds a feature
+chore: changes to the build process or auxiliary tools
+```
 
 
-Then, run the frontend with the following commands:
+## API Documentation
 
-`
-npm start
-`
+### Authentication
+The application uses cookie-based authentication with js-cookie library.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+### API Integration
+The app uses Axios for API requests. Service functions are organized in the `/services` directory.
 
-## Authors <a name="author"></a>
+```typescript
+// Axios instance for api calls
+import axios from "axios";
+import Cookies from "js-cookie";
 
-**Jose Montoya**
+const axiosInstance = axios.create({
+  baseURL: "http://41.90.122.129:81/api/v1",
+});
 
-- GitHub: [@jmonto55](https://github.com/jmonto55)
-- LinkedIn: [jmontodev](https://www.linkedin.com/in/jmontodev/)
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const excludedEndpoints = [
+      "/signup/",
+      "/password-reset/",
+      "/set-new-password/",
+      "/resend-otp/",
+      "/verify-otp/",
+      "/login/",
+    ];
 
-**Mohamed Abd Elmohsen Saleh**
+    if (config.url && !excludedEndpoints.includes(config.url)) {
+      const token = Cookies.get("access_token");
+      if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-- GitHub: [@mohamed20163858](https://github.com/mohamed20163858)
-- LinkedIn: [mohamed-mohsen-685a4995](https://www.linkedin.com/in/mohamedmohsensaleh/)
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-**Simon Gideon**
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
 
-- GitHub: [@SimonGideon](https://github.com/SimonGideon)
-- LinkedIn: [mnayi-gideon](https://www.linkedin.com/in/simon-gideon/)
+      try {
+        const refreshToken = Cookies.get("refresh_token");
+        const response = await axios.post(
+          `${axiosInstance.defaults.baseURL}/auth-refresh/`,
+          {
+            refresh_token: refreshToken,
+          }
+        );
 
-**Bryan Hurtado**
+        const newAccessToken = response.data.access;
+        const newRefreshToken = response.data.refresh;
+        Cookies.set("access_token", newAccessToken);
+        Cookies.set("refresh_token", newRefreshToken);
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        return axios(originalRequest);
+      } catch (refreshError) {
+        window.location.href = "/auth/login";
+        return Promise.reject(refreshError);
+      }
+    }
 
-- GitHub: [@darkxdev](https://github.com/darkxdev)
-- LinkedIn: [bryan-hurtado](https://www.linkedin.com/in/bryan-hurtado/)
+    return Promise.reject(error);
+  }
+);
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+export default axiosInstance;
 
-## 🔭 Future Features <a name="future-features"></a>
+```
 
-- **Upload Images**
-- **Build APIs**
+## Deployment
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+### Build for Production
+```bash
+# Create optimized production build
+npm run build
 
-## 🤝 Contributing <a name="contributing"></a>
+# Start the production server
+npm run start
+```
 
-Contributions, issues, and feature requests are welcome!
+### Next.js Deployment Options
+- Vercel (recommended for Next.js apps)
+- Netlify
+- AWS Amplify
+- Self-hosted Node.js server
 
-Feel free to check the [issues page](https://github.com/jmonto55/book-an-appointment-frontend/issues).
+## Common Issues
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+### Problem: Images not loading from the API server
+**Solution:** Check that the domain is correctly configured in next.config.js and that the image paths match the expected pattern.
 
-## ⭐️ Show your support <a name="support"></a>
+### Problem: Server Connectivity
+**Solution:** Verify in the inspect browser dev tools network tab if there are any connectivity issues inquire to confirm if the server is up.
 
-If you like this project please give it a star 😁🌟✨
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## 🙏 Acknowledgments <a name="acknowledgements"></a>
-
-Special thanks to [Murat Korkmaz](https://www.behance.net/muratk) for the awesome design.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## 📝 License <a name="license"></a>
-
-This project is [MIT](./LICENSE) licensed.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## Resources
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Radix UI Documentation](https://www.radix-ui.com/docs/primitives)
+- [React Hook Form Documentation](https://react-hook-form.com/get-started)
+- [Redux Toolkit Documentation](https://redux-toolkit.js.org/introduction/getting-started)
+- [Shadcn](https://ui.shadcn.com/docs/react-19)
