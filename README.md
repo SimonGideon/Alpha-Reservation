@@ -137,9 +137,6 @@ chore: changes to the build process or auxiliary tools
 ### Authentication
 The application uses cookie-based authentication with js-cookie library.
 
-### API Integration
-The app uses Axios for API requests. Service functions are organized in the `/services` directory.
-
 ```typescript
 // Axios instance for api calls
 import axios from "axios";
